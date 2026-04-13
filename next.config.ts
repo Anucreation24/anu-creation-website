@@ -23,6 +23,10 @@ const config = {
         protocol: 'https',
         hostname: '**.googleusercontent.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+      },
     ],
   },
   // Allow mobile devices on local network to access HMR and JS chunks

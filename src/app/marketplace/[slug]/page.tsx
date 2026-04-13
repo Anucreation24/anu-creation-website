@@ -1,4 +1,5 @@
 import { marketplaceListingBySlugQuery, marketplaceListingsQuery } from "@/sanity/lib/queries";
+export const revalidate = 60;
 import { client } from "@/sanity/lib/client";
 import ListingDetail from "@/components/sections/marketplace/ListingDetail";
 import { MarketplaceListing } from "@/types/marketplace";

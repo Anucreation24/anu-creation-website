@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+export const revalidate = 60;
 import { client } from "@/sanity/lib/client";
 import { servicesQuery } from "@/sanity/lib/queries";
 

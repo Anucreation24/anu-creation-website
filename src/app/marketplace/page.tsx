@@ -1,4 +1,5 @@
 import MarketplaceHero from "@/components/sections/marketplace/MarketplaceHero";
+export const revalidate = 60;
 import MarketplaceGrid from "@/components/sections/marketplace/MarketplaceGrid";
 import MarketplaceCTA from "@/components/sections/marketplace/MarketplaceCTA";
 import { Metadata } from "next";
