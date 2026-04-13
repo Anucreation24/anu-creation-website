@@ -73,7 +73,7 @@ export const servicesQuery = groq`*[_type == "service"] | order(order asc, _crea
 export const galleryItemsQuery = groq`*[_type == "galleryItem" && isVisible == true] | order(_createdAt desc){
   _id,
   title,
-  "category": select(category == "Other" => customCategory, category),
+  "category": select(category == "Other" => coalesce(customCategory, "Other"), category),
   imageUrl,
   mediaType,
   videoUrl,
