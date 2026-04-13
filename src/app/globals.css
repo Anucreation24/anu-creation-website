@@ -1,0 +1,200 @@
+@import "tailwindcss";
+
+/* =============================================
+   ANU CREATION — Global Design System
+   Luxury Dark Editorial Theme
+   ============================================= */
+
+@layer base {
+  :root {
+    --bg-primary: #0A0A0A;
+    --bg-surface: #111111;
+    --bg-surface-2: #151515;
+    --border: #2A2A2A;
+    --accent-gold: #C9A64B;
+    --soft-gold: #D8BA67;
+    --text-primary: #F5F2EA;
+    --text-muted: #B7B1A3;
+    --text-dim: #6B6560;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+  }
+
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-inter), 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0A0A0A;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #2A2A2A;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #C9A64B;
+  }
+
+  /* Selection */
+  ::selection {
+    background: #C9A64B33;
+    color: #C9A64B;
+  }
+}
+
+@layer utilities {
+  /* Gold gradient text */
+  .gold-text {
+    background: linear-gradient(135deg, #C9A64B 0%, #D8BA67 50%, #C9A64B 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gold-text-subtle {
+    background: linear-gradient(135deg, #A88535 0%, #C9A64B 50%, #D8BA67 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Gold border */
+  .gold-border {
+    border-color: #C9A64B;
+  }
+
+  /* Section padding */
+  .section-padding {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+  @media (min-width: 640px) {
+    .section-padding {
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .section-padding {
+      padding-top: 8rem;
+      padding-bottom: 8rem;
+    }
+  }
+
+  /* Elegant divider */
+  .gold-divider {
+    width: 3rem;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #C9A64B, transparent);
+  }
+
+  /* Noise texture overlay */
+  .noise-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Card hover effect */
+  .card-hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(201, 166, 75, 0.2);
+  }
+
+  /* Smooth link underline */
+  .link-underline {
+    position: relative;
+  }
+  .link-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: #C9A64B;
+    transition: width 0.3s ease;
+  }
+  .link-underline:hover::after {
+    width: 100%;
+  }
+
+  /* Hero gradient */
+  .hero-gradient {
+    background: radial-gradient(ellipse at center top, #1a1505 0%, #0A0A0A 60%);
+  }
+
+  /* Elegant surface */
+  .elegant-surface {
+    background: linear-gradient(135deg, #111111 0%, #151515 100%);
+    border: 1px solid #2A2A2A;
+  }
+
+  /* Text balance */
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Font face keyframes */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes borderGlow {
+  0%, 100% { box-shadow: 0 0 20px rgba(201, 166, 75, 0.1); }
+  50% { box-shadow: 0 0 40px rgba(201, 166, 75, 0.25); }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.7s ease forwards;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, #C9A64B 0%, #D8BA67 25%, #C9A64B 50%, #D8BA67 75%, #C9A64B 100%);
+  background-size: 200% auto;
+  animation: shimmer 3s linear infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
