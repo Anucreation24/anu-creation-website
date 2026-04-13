@@ -73,13 +73,14 @@ export const servicesQuery = groq`*[_type == "service"] | order(order asc, _crea
 export const galleryItemsQuery = groq`*[_type == "galleryItem" && isVisible == true] | order(_createdAt desc){
   _id,
   title,
-  category,
+  "category": select(category == "Other" => customCategory, category),
   imageUrl,
   mediaType,
   videoUrl,
   description,
-  isFeatured
-}`
+  isFeatured,
+  isVisible
+} `
 
 export const partnersQuery = groq`*[_type == "partner"] | order(order asc, _createdAt desc){
   _id,

@@ -38,9 +38,23 @@ export const galleryItemSchema = defineType({
           { title: 'Clocks', value: 'Clocks' },
           { title: 'Key Tags', value: 'Key Tags' },
           { title: 'Design Work', value: 'Design Work' },
+          { title: 'Other', value: 'Other' },
         ],
       },
       validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'customCategory',
+      title: 'Custom Category Name',
+      type: 'string',
+      description: 'Only used if Category is set to "Other".',
+      hidden: ({ document }) => document?.category !== 'Other',
+      validation: (Rule) => Rule.custom((value, context) => {
+        if (context.document?.category === 'Other' && !value) {
+          return 'Please provide a custom category name'
+        }
+        return true
+      }),
     }),
     defineField({
       name: 'imageUrl',
