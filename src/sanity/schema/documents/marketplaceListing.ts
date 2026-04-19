@@ -70,6 +70,53 @@ export const marketplaceListingSchema = defineType({
       ],
     }),
     defineField({
+      name: 'contactLinks',
+      title: 'Additional Contact Links (Platform)',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'platform',
+              title: 'Platform',
+              type: 'string',
+              options: {
+                list: [
+                  { title: 'WhatsApp', value: 'WhatsApp' },
+                  { title: 'Email', value: 'Email' },
+                  { title: 'Phone', value: 'Phone' },
+                  { title: 'Website', value: 'Website' },
+                  { title: 'Facebook', value: 'Facebook' },
+                  { title: 'Instagram', value: 'Instagram' },
+                  { title: 'TikTok', value: 'TikTok' },
+                  { title: 'YouTube', value: 'YouTube' },
+                  { title: 'LinkedIn', value: 'LinkedIn' },
+                  { title: 'Telegram', value: 'Telegram' },
+                  { title: 'X / Twitter', value: 'Twitter' },
+                  { title: 'Other', value: 'Other' },
+                ],
+              },
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: 'url',
+              title: 'URL or Value',
+              type: 'string',
+              description: 'For Phone/WhatsApp enter the number. For Email enter the address. For others enter the full URL.',
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: 'label',
+              title: 'Custom Label (Optional)',
+              type: 'string',
+              description: 'Override the default platform name (e.g. "Sales", "Support").',
+            }),
+          ]
+        }
+      ]
+    }),
+    defineField({
       name: 'services',
       title: 'Services Offered',
       type: 'array',

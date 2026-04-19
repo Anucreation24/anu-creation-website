@@ -19,6 +19,12 @@ export interface MarketplaceContact {
   websiteUrl?: string;
 }
 
+export interface MarketplaceContactLink {
+  platform: string;
+  url: string;
+  label?: string;
+}
+
 export interface MarketplaceListing {
   _id: string;
   businessName: string;
@@ -30,6 +36,7 @@ export interface MarketplaceListing {
   fullDescription?: string;
   location?: string;
   contact?: MarketplaceContact;
+  contactLinks?: MarketplaceContactLink[];
   services?: MarketplaceService[];
   products?: MarketplaceProduct[];
   featured?: boolean;

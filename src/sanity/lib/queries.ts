@@ -133,6 +133,7 @@ export const marketplaceListingBySlugQuery = groq`*[_type == "marketplaceListing
   fullDescription,
   location,
   contact,
+  contactLinks,
   services,
   products,
   featured

@@ -12,7 +12,14 @@ import {
   Globe, 
   MapPin, 
   ChevronRight,
-  ExternalLink 
+  ExternalLink,
+  Users,
+  Camera,
+  Play,
+  Briefcase,
+  Hash,
+  Send,
+  Link as LinkIcon
 } from "lucide-react";
 
 interface ListingDetailProps {
@@ -25,6 +32,72 @@ interface ListingDetailProps {
  */
 export default function ListingDetail({ listing }: ListingDetailProps) {
   const logoUrl = "/images/logo.png";
+
+  const getPlatformIcon = (platform: string) => {
+    switch (platform.toLowerCase()) {
+      case 'whatsapp': return MessageCircle;
+      case 'email': return Mail;
+      case 'phone': return Phone;
+      case 'facebook': return Users;
+      case 'instagram': return Camera;
+      case 'youtube': return Play;
+      case 'linkedin': return Briefcase;
+      case 'twitter': return Hash;
+      case 'telegram': return Send;
+      case 'website': return Globe;
+      default: return LinkIcon;
+    }
+  };
+
+  const getSmartUrl = (platform: string, value: string) => {
+    if (!value) return '';
+    const lower = platform.toLowerCase();
+    if (lower === 'whatsapp') {
+      if (value.startsWith('http')) return value;
+      return `https://wa.me/${value.replace(/\+/g, '')}`;
+    }
+    if (lower === 'email') {
+      if (value.startsWith('mailto:')) return value;
+      return `mailto:${value}`;
+    }
+    if (lower === 'phone') {
+      if (value.startsWith('tel:')) return value;
+      return `tel:${value}`;
+    }
+    // Assume it's a URL but missing http sequence if other
+    if (!value.startsWith('http') && !value.startsWith('mailto:') && !value.startsWith('tel:')) {
+      return `https://${value}`; 
+    }
+    return value;
+  };
+
+  const allLinks: { platform: string; url: string; label?: string; icon: any }[] = [];
+
+  // Legacy fields
+  if (listing.contact?.whatsapp) allLinks.push({ platform: 'WhatsApp', url: getSmartUrl('WhatsApp', listing.contact.whatsapp), icon: getPlatformIcon('WhatsApp') });
+  if (listing.contact?.email) allLinks.push({ platform: 'Email', url: getSmartUrl('Email', listing.contact.email), icon: getPlatformIcon('Email') });
+  if (listing.contact?.phone) allLinks.push({ platform: 'Phone', url: getSmartUrl('Phone', listing.contact.phone), icon: getPlatformIcon('Phone') });
+  if (listing.contact?.websiteUrl) allLinks.push({ platform: 'Website', url: getSmartUrl('Website', listing.contact.websiteUrl), icon: getPlatformIcon('Website') });
+
+  // Dynamic links (will append alongside legacy, so legacy is preserved until admin migrates)
+  if (listing.contactLinks && listing.contactLinks.length > 0) {
+    listing.contactLinks.forEach(link => {
+       // Avoid duplicates if admin already typed same platform and url
+       const existingIndex = allLinks.findIndex(l => l.platform.toLowerCase() === link.platform.toLowerCase());
+       const processedLink = {
+         platform: link.platform,
+         url: getSmartUrl(link.platform, link.url),
+         label: link.label,
+         icon: getPlatformIcon(link.platform)
+       };
+       if (existingIndex > -1) {
+         // Replace legacy with new if duplicated platform
+         allLinks[existingIndex] = processedLink;
+       } else {
+         allLinks.push(processedLink);
+       }
+    });
+  }
 
   return (
     <article className="min-h-screen bg-[#0A0A0A] pb-24">
@@ -178,63 +251,34 @@ export default function ListingDetail({ listing }: ListingDetailProps) {
 
         {/* Right Col: Contact Sideboard (4 cols) */}
         <aside className="lg:col-span-4 lg:sticky lg:top-32 h-fit space-y-8">
-           {(listing.contact?.whatsapp || listing.contact?.email || listing.contact?.phone || listing.contact?.websiteUrl) && (
+           {allLinks.length > 0 && (
              <div className="p-8 rounded-2xl bg-[#C9A64B]/5 border border-[#C9A64B]/20 backdrop-blur-sm space-y-8">
                 <h3 className="font-[family-name:var(--font-cormorant)] text-2xl text-[#F5F2EA]">Direct Contact</h3>
                 
                 <div className="space-y-4">
-                   {listing.contact?.whatsapp && (
-                      <a 
-                        href={`https://wa.me/${listing.contact.whatsapp.replace(/\+/g, '')}`} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-between p-4 rounded-xl bg-[#0A0A0A]/40 border border-white/5 hover:border-[#C9A64B]/30 hover:bg-[#C9A64B]/10 transition-all duration-300 group"
-                      >
-                         <div className="flex items-center gap-3">
-                            <MessageCircle className="w-5 h-5 text-[#C9A64B]" />
-                            <span className="text-sm text-[#F5F2EA]">WhatsApp</span>
-                         </div>
-                         <ChevronRight className="w-4 h-4 text-[#C9A64B]/40 group-hover:text-[#C9A64B] transition-colors" />
-                      </a>
-                   )}
-                   {listing.contact?.email && (
-                      <a 
-                        href={`mailto:${listing.contact.email}`}
-                        className="flex items-center justify-between p-4 rounded-xl bg-[#0A0A0A]/40 border border-white/5 hover:border-[#C9A64B]/30 hover:bg-[#C9A64B]/10 transition-all duration-300 group"
-                      >
-                         <div className="flex items-center gap-3">
-                            <Mail className="w-5 h-5 text-[#C9A64B]" />
-                            <span className="text-sm text-[#F5F2EA]">Email</span>
-                         </div>
-                         <ChevronRight className="w-4 h-4 text-[#C9A64B]/40 group-hover:text-[#C9A64B] transition-colors" />
-                      </a>
-                   )}
-                   {listing.contact?.phone && (
-                      <a 
-                        href={`tel:${listing.contact.phone}`}
-                        className="flex items-center justify-between p-4 rounded-xl bg-[#0A0A0A]/40 border border-white/5 hover:border-[#C9A64B]/30 hover:bg-[#C9A64B]/10 transition-all duration-300 group"
-                      >
-                         <div className="flex items-center gap-3">
-                            <Phone className="w-5 h-5 text-[#C9A64B]" />
-                            <span className="text-sm text-[#F5F2EA]">Phone</span>
-                         </div>
-                         <ChevronRight className="w-4 h-4 text-[#C9A64B]/40 group-hover:text-[#C9A64B] transition-colors" />
-                      </a>
-                   )}
-                   {listing.contact?.websiteUrl && (
-                      <a 
-                        href={listing.contact.websiteUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-between p-4 rounded-xl bg-[#0A0A0A]/40 border border-white/5 hover:border-[#C9A64B]/30 hover:bg-[#C9A64B]/10 transition-all duration-300 group"
-                      >
-                         <div className="flex items-center gap-3">
-                            <Globe className="w-5 h-5 text-[#C9A64B]" />
-                            <span className="text-sm text-[#F5F2EA]">Website</span>
-                         </div>
-                         <ExternalLink className="w-4 h-4 text-[#C9A64B]/40 group-hover:text-[#C9A64B] transition-colors" />
-                      </a>
-                   )}
+                   {allLinks.map((link, idx) => {
+                     const Icon = link.icon;
+                     const isExternal = link.platform.toLowerCase() !== 'email' && link.platform.toLowerCase() !== 'phone';
+                     const target = isExternal ? "_blank" : undefined;
+                     const rel = isExternal ? "noopener noreferrer" : undefined;
+                     const ActionIcon = (link.platform.toLowerCase() === 'website' || !['whatsapp', 'email', 'phone'].includes(link.platform.toLowerCase())) ? ExternalLink : ChevronRight;
+
+                     return (
+                       <a 
+                         key={idx}
+                         href={link.url}
+                         target={target}
+                         rel={rel}
+                         className="flex items-center justify-between p-4 rounded-xl bg-[#0A0A0A]/40 border border-white/5 hover:border-[#C9A64B]/30 hover:bg-[#C9A64B]/10 transition-all duration-300 group"
+                       >
+                          <div className="flex items-center gap-3">
+                             <Icon className="w-5 h-5 text-[#C9A64B]" />
+                             <span className="text-sm text-[#F5F2EA]">{link.label || link.platform}</span>
+                          </div>
+                          <ActionIcon className="w-4 h-4 text-[#C9A64B]/40 group-hover:text-[#C9A64B] transition-colors" />
+                       </a>
+                     );
+                   })}
                 </div>
 
                 <div className="pt-4 border-t border-white/5">
